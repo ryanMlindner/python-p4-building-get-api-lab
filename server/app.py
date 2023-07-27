@@ -20,14 +20,14 @@ def index():
 
 @app.route('/bakeries')
 def bakeries():
-    bakeries = []
-    for bakery in Bakery.query.all():
-        bakeries.append(bakery.to_dict())
+    bakeries = Bakery.query.all()
+    bakeries_list = [bakery.to_dict() for bakery in bakeries]
     
     response = make_response(
-        bakeries,
+        bakeries_list,
         200
     )
+
     return response
 
 @app.route('/bakeries/<int:id>')
@@ -58,7 +58,7 @@ def baked_goods_by_price():
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
-    baked_good = BakedGood.query.order_by(BakedGood.price).first()
+    baked_good = BakedGood.query.order_by(BakedGood.price.desc()).first()
     baked_good_dict = baked_good.to_dict()
     response = make_response(
         baked_good_dict,
